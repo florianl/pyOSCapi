@@ -19,7 +19,6 @@ setup(
     version='0.1',
     py_modules=['pyOSCapi'],
     packages=find_packages(),
-    install_requires=reqs,
     include_package_data=True,
     description = 'Python API to interact with network devices using the Open Spherical Camera API',
     author = 'Florian Lehner',
