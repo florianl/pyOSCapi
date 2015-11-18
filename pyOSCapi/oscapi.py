@@ -29,7 +29,7 @@ class OSCAPI:
 						"X-XSRF-Protected":"1"}
 		self.sess	= requests.session()
 
-	def start(self):
+	def connect(self):
 		url = "http://" + self.ip + ":" + self.port +"/osc/commands/execute"
 		data = json.dumps({"name":"camera.startSession"})
 		self.header["Content-Type"] = "application/json; charset=utf-8"
@@ -48,7 +48,7 @@ class OSCAPI:
 		print rep
 		return
 
-	def stop(self):
+	def disconnect(self):
 		url = "http://" + self.ip + ":" + self.port +"/osc/commands/execute"
 		data = json.dumps({"name":"camera.closeSession", "parameters":{"sessionId":self.sid}})
 		self.header["Content-Type"] = "application/json; charset=utf-8"
