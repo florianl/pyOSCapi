@@ -26,5 +26,8 @@ setup(
     url = 'https://github.com/florianl/pyOSCapi/',
     download_url = 'https://github.com/florianl/pyOSCapi/archive/master.tar.gz',
     keywords = ['Open Spherical Camera', 'API '],
-    install_requires=['requests', 'simplejson']
+    install_requires=['requests', 'simplejson'],
+    classifiers=[   'Development Status :: 4 - Beta',
+                    'Intended Audience :: Developers'
+                ]
 )
