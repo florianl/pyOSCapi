@@ -29,5 +29,6 @@ setup(
     install_requires=['requests', 'simplejson'],
     classifiers=[   'Development Status :: 4 - Beta',
                     'Intended Audience :: Developers'
-                ]
+                ],
+    license = 'Apache License 2.0',
 )
