@@ -15,6 +15,26 @@
 import requests
 import simplejson as json
 
+_options=(	"captureMode", "captureModeSupport",
+			"exposureProgram", "exposureProgramSupport",
+			"iso", "isoSupport",
+			"shutterSpeed", "shutterSpeedSupport",
+			"aperture", "apertureSupport",
+			"whiteBalance", "whiteBalanceSupport",
+			"exposureCompensation", "exposureCompensationSupport",
+			"fileFormat", "fileFormatSupport",
+			"exposureDelay", "exposureDelay",
+			"sleepDelay", "sleepDelaySupport",
+			"offDelay", "offDelaySupport",
+			"totalSpace", "remainingSpace",
+			"gpsInfo", "dateTimeZone",
+			"hdr", "hdrSupport",
+			"exposureBracket", "exposureBracketSupport",
+			"gyro", "gyroSupport",
+			"imageStabilization", "imageStabilizationSupport",
+			"wifiPassword"
+		)
+
 class OSCAPI:
 
 	def __init__(self, ip, port):
@@ -28,6 +48,7 @@ class OSCAPI:
 		self.header	= {	"User-Agent":"pyOSCapi",
 						"X-XSRF-Protected":"1"}
 		self.sess	= requests.session()
+		self.options = {}
 
 	def connect(self):
 		url = "http://" + self.ip + ":" + self.port +"/osc/commands/execute"
@@ -64,7 +85,7 @@ class OSCAPI:
 		req = requests.post(url, data=data, headers=self.header)
 		rep = req.json()
 		print rep
-		return (rep["results"]["fileUri"])
+		return
 
 	def listPictures(self, count, size, thumbs):
 		url = "http://" + self.ip + ":" + self.port +"/osc/commands/execute"
@@ -101,17 +122,17 @@ class OSCAPI:
 		print rep
 		return
 
-	def getOptions(self, optionlist=["captureMode", "iso", "shutterSpeed", "aperture",
-								"whiteBalance", "exposureCompensation", "fileFormat",
-								"exposureDelay", "sleepDelay", "offDelay", "totalSpace",
-								"remainingSpace", "gpsInfo", "hdr", "gyro",
-								"imageStabilization", "wifiPassword"]):
+	def getOptions(self, optionlist=_options):
 		url = "http://" + self.ip + ":" + self.port +"/osc/commands/execute"
 		data = json.dumps({"name":"camera.getOptions", "parameters":{"sessionId":self.sid, "optionNames":optionlist}})
 		self.header["Content-Type"] = "application/json; charset=utf-8"
 		req = requests.post(url, data=data, headers=self.header)
 		rep = req.json()
-		print rep
+		for key in rep:
+			if key == "results":
+				for option in rep[key]["options"]:
+					if option in _options:
+						self.options[option] = rep[key]["options"][option]
 		return
 
 	def info(self):
