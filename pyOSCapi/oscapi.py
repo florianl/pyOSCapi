@@ -48,7 +48,8 @@ class OSCAPI:
 		self.header	= {	"User-Agent":"pyOSCapi",
 						"X-XSRF-Protected":"1"}
 		self.sess	= requests.session()
-		self.options = {}
+		self.options 	= {}
+		self.cmds		= []
 
 	def connect(self):
 		url = "http://" + self.ip + ":" + self.port +"/osc/commands/execute"
@@ -140,6 +141,9 @@ class OSCAPI:
 		req = requests.get(url, headers=self.header)
 		rep = req.json()
 		print rep
+		for key in rep:
+			if key == "api":
+				self.cmds.append(rep[key])
 		return
 
 	def state(self):
