@@ -88,7 +88,7 @@ class OSCAPI:
 		print rep
 		return
 
-	def listPictures(self, count, size, thumbs):
+	def listImages(self, count, size, thumbs):
 		url = "http://" + self.ip + ":" + self.port +"/osc/commands/execute"
 		data = json.dumps({"name":"camera.listImages", "parameters":{"entryCount":count, "maxSize":size, "includeThumb":bool(thumbs)}})
 		self.header["Content-Type"] = "application/json; charset=utf-8"
@@ -97,7 +97,9 @@ class OSCAPI:
 		print rep
 		return
 
-	def deletePicture(self, fileUri):
+	def deleteImage(self, fileUri=None):
+		if fileUri == None:
+			return
 		url = "http://" + self.ip + ":" + self.port +"/osc/commands/execute"
 		data = json.dumps({"name":"camera.delete", "parameters":{"fileUri":fileUri}})
 		self.header["Content-Type"] = "application/json; charset=utf-8"
@@ -106,17 +108,21 @@ class OSCAPI:
 		print rep
 		return
 
-	def getPicture(self, fileUri):
+	def getImage(self, fileUri=None):
+		if fileUri == None:
+			return
 		url = "http://" + self.ip + ":" + self.port +"/osc/commands/execute"
-		data = json.dumps({"name":"camera.delete", "parameters":{"fileUri":fileUri}})
+		data = json.dumps({"name":"camera.getImage", "parameters":{"fileUri":fileUri}})
 		self.header["Content-Type"] = "application/json; charset=utf-8"
 		req = requests.post(url, data=data, headers=self.header)
 		print req
 		return
 
-	def getPictureMetadata(self, fileUri):
+	def getImageMetadata(self, fileUri=None):
+		if fileUri == None:
+			return
 		url = "http://" + self.ip + ":" + self.port +"/osc/commands/execute"
-		data = json.dumps({"name":"camera.delete", "parameters":{"fileUri":fileUri}})
+		data = json.dumps({"name":"camera.getMetadata", "parameters":{"fileUri":fileUri}})
 		self.header["Content-Type"] = "application/json; charset=utf-8"
 		req = requests.post(url, data=data, headers=self.header)
 		rep = req.json()
