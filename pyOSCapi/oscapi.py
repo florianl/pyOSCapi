@@ -136,14 +136,28 @@ class OSCAPI:
 						self.options[option] = rep[key]["options"][option]
 		return
 
+	def setOption(self, settings=None):
+		if settings == None:
+			return
+		if not self.options:
+			self.getOptions()
+		for opt in settings:
+			if not self.options.has_key(opt):
+				return
+		url = "http://" + self.ip + ":" + self.port +"/osc/commands/execute"
+		data = json.dumps({"name":"camera.setOptions", "parameters":{"sessionId":self.sid, "options":settings}})
+		self.header["Content-Type"] = "application/json; charset=utf-8"
+		req = requests.post(url, data=data, headers=self.header)
+		rep = req.json()
+		return req
+
 	def info(self):
 		url = "http://" + self.ip + ":" + self.port +"/osc/info"
 		req = requests.get(url, headers=self.header)
 		rep = req.json()
-		print rep
 		for key in rep:
 			if key == "api":
-				self.cmds.append(rep[key])
+				self.cmds += (rep[key])
 		return
 
 	def state(self):
