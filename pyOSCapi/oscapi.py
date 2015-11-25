@@ -58,9 +58,8 @@ class OSCAPI:
 		self.header["Content-Type"] = "application/json; charset=utf-8"
 		req = requests.post(url, data=data, headers=self.header)
 		rep = req.json()
-		print rep
 		self.sid = (rep["results"]["sessionId"])
-		return
+		return rep
 
 	def update(self):
 		url = "http://" + self.ip + ":" + self.port +"/osc/commands/execute"
@@ -68,8 +67,7 @@ class OSCAPI:
 		self.header["Content-Type"] = "application/json; charset=utf-8"
 		req = requests.post(url, data=data, headers=self.header)
 		rep = req.json()
-		print rep
-		return
+		return rep
 
 	def disconnect(self):
 		url = "http://" + self.ip + ":" + self.port +"/osc/commands/execute"
@@ -77,8 +75,7 @@ class OSCAPI:
 		self.header["Content-Type"] = "application/json; charset=utf-8"
 		req = requests.post(url, data=data, headers=self.header)
 		rep = req.json()
-		print rep
-		return
+		return rep
 
 	def _checkProgress(self):
 		time.sleep(1)
@@ -111,8 +108,7 @@ class OSCAPI:
 		self.header["Content-Type"] = "application/json; charset=utf-8"
 		req = requests.post(url, data=data, headers=self.header)
 		rep = req.json()
-		print rep
-		return
+		return rep
 
 	def deleteImage(self, fileUri=None):
 		if fileUri == None:
@@ -122,8 +118,7 @@ class OSCAPI:
 		self.header["Content-Type"] = "application/json; charset=utf-8"
 		req = requests.post(url, data=data, headers=self.header)
 		rep = req.json()
-		print rep
-		return
+		return rep
 
 	def getImage(self, fileUri=None):
 		if fileUri == None:
@@ -132,8 +127,7 @@ class OSCAPI:
 		data = json.dumps({"name":"camera.getImage", "parameters":{"fileUri":fileUri}})
 		self.header["Content-Type"] = "application/json; charset=utf-8"
 		req = requests.post(url, data=data, headers=self.header)
-		print req
-		return
+		return req
 
 	def getImageMetadata(self, fileUri=None):
 		if fileUri == None:
@@ -143,8 +137,7 @@ class OSCAPI:
 		self.header["Content-Type"] = "application/json; charset=utf-8"
 		req = requests.post(url, data=data, headers=self.header)
 		rep = req.json()
-		print rep
-		return
+		return rep
 
 	def getOptions(self, optionlist=_options):
 		url = "http://" + self.ip + ":" + self.port +"/osc/commands/execute"
@@ -157,7 +150,7 @@ class OSCAPI:
 				for option in rep[key]["options"]:
 					if option in _options:
 						self.options[option] = rep[key]["options"][option]
-		return
+		return rep
 
 	def setOption(self, settings=None):
 		if settings == None:
@@ -172,7 +165,7 @@ class OSCAPI:
 		self.header["Content-Type"] = "application/json; charset=utf-8"
 		req = requests.post(url, data=data, headers=self.header)
 		rep = req.json()
-		return req
+		return rep
 
 	def info(self):
 		url = "http://" + self.ip + ":" + self.port +"/osc/info"
@@ -181,11 +174,10 @@ class OSCAPI:
 		for key in rep:
 			if key == "api":
 				self.cmds += (rep[key])
-		return
+		return rep
 
 	def state(self):
 		url = "http://" + self.ip + ":" + self.port +"/osc/state"
 		req = requests.post(url, headers=self.header)
 		rep = req.json()
-		print rep
-		return
+		return rep
