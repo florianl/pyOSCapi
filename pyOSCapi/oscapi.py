@@ -14,6 +14,7 @@
 
 import requests
 import simplejson as json
+import time
 
 _options=(	"captureMode", "captureModeSupport",
 			"exposureProgram", "exposureProgramSupport",
@@ -79,14 +80,30 @@ class OSCAPI:
 		print rep
 		return
 
-	def takePicture(self):
+	def _checkProgress(self):
+		time.sleep(1)
+		rep = self.state()
+		# this is a workaround which works only for bublcams
+		# 
+		# the osc api does not define how to integrate the
+		# inProgress status in the /osc/state
+		if "_bublCommands" in rep["state"]:
+			cmdStatus = rep["state"]["_bublCommands"]
+			for tmp in cmdStatus:
+				if tmp["state"] == "inProgress":
+					rep = self._checkProgress()
+		return rep
+
+	def takePicture(self, wait=True):
 		url = "http://" + self.ip + ":" + self.port +"/osc/commands/execute"
 		data = json.dumps({"name":"camera.takePicture", "parameters":{"sessionId":self.sid}})
 		self.header["Content-Type"] = "application/json; charset=utf-8"
 		req = requests.post(url, data=data, headers=self.header)
 		rep = req.json()
-		print rep
-		return
+		if wait == True:
+			if rep["state"] == "inProgress":
+				rep = self._checkProgress()
+		return rep
 
 	def listImages(self, count, size, thumbs):
 		url = "http://" + self.ip + ":" + self.port +"/osc/commands/execute"
