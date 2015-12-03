@@ -58,7 +58,8 @@ class OSCAPI:
 		self.header["Content-Type"] = "application/json; charset=utf-8"
 		req = requests.post(url, data=data, headers=self.header)
 		rep = req.json()
-		self.sid = (rep["results"]["sessionId"])
+		if rep["state"] == "done":
+			self.sid = (rep["results"]["sessionId"])
 		return rep
 
 	def update(self):
