@@ -181,3 +181,8 @@ class OSCAPI:
 		req = requests.post(url, headers=self.header)
 		rep = req.json()
 		return rep
+
+	def getCmds(self):
+		if not self.cmds:
+			self.info()
+		return self.cmds
