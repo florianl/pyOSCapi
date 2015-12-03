@@ -186,3 +186,14 @@ class OSCAPI:
 		if not self.cmds:
 			self.info()
 		return self.cmds
+
+	def getSid(self):
+		return self.sid
+
+	def execCustomCmd(self, cmd=None, payload=None, contentType=None):
+		if cmd == None:
+			return
+		url = "http://" + self.ip + ":" + self.port + cmd
+		req = requests.post(url, data=payload, headers=contentType)
+		rep = req.json()
+		return rep
