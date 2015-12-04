@@ -74,6 +74,7 @@ class OSCAPI:
 		url = "http://" + self.ip + ":" + self.port +"/osc/commands/execute"
 		data = json.dumps({"name":"camera.closeSession", "parameters":{"sessionId":self.sid}})
 		self.header["Content-Type"] = "application/json; charset=utf-8"
+		self.header["Connection"] = "close"
 		req = requests.post(url, data=data, headers=self.header)
 		rep = req.json()
 		return rep
