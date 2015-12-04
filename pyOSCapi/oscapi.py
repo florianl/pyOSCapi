@@ -48,7 +48,7 @@ class OSCAPI:
 		self.sid	= None
 		self.header	= {	"User-Agent":"pyOSCapi",
 						"X-XSRF-Protected":"1"}
-		self.sess	= requests.session()
+		self.__sess	= requests.session()
 		self.options 	= {}
 		self.cmds		= []
 
