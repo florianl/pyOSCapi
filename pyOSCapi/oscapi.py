@@ -16,6 +16,7 @@ import requests
 import simplejson as json
 import time
 
+# currently supported options from the OSC API
 _options=(	"captureMode", "captureModeSupport",
 			"exposureProgram", "exposureProgramSupport",
 			"iso", "isoSupport",
@@ -40,6 +41,8 @@ class OSCAPI:
 
 	def __init__(self, ip, port):
 		"""
+		A device supporting the OSC-API
+
 		:param ip:		IP of the device you want to connect to
 		:param port:	Port you want to connect to
 		"""
@@ -53,6 +56,9 @@ class OSCAPI:
 		self.cmds		= []
 
 	def connect(self):
+		"""
+		Opens a connection
+		"""
 		url = "http://" + self.ip + ":" + self.port +"/osc/commands/execute"
 		data = json.dumps({"name":"camera.startSession"})
 		self.header["Content-Type"] = "application/json; charset=utf-8"
@@ -63,6 +69,9 @@ class OSCAPI:
 		return rep
 
 	def update(self):
+		"""
+		Updates the session
+		"""
 		url = "http://" + self.ip + ":" + self.port +"/osc/commands/execute"
 		data = json.dumps({"name":"camera.updateSession", "parameters":{"sessionId":self.sid}})
 		self.header["Content-Type"] = "application/json; charset=utf-8"
@@ -71,6 +80,9 @@ class OSCAPI:
 		return rep
 
 	def disconnect(self):
+		"""
+		Close the connection
+		"""
 		url = "http://" + self.ip + ":" + self.port +"/osc/commands/execute"
 		data = json.dumps({"name":"camera.closeSession", "parameters":{"sessionId":self.sid}})
 		self.header["Content-Type"] = "application/json; charset=utf-8"
@@ -94,6 +106,12 @@ class OSCAPI:
 		return rep
 
 	def takePicture(self, wait=True):
+		"""
+		Take a picture via the API
+
+		:param wait:		If True, method will return after taking the picture is done.
+							Else you will have to wait by youself.
+		"""
 		url = "http://" + self.ip + ":" + self.port +"/osc/commands/execute"
 		data = json.dumps({"name":"camera.takePicture", "parameters":{"sessionId":self.sid}})
 		self.header["Content-Type"] = "application/json; charset=utf-8"
@@ -105,6 +123,13 @@ class OSCAPI:
 		return rep
 
 	def listImages(self, count, size, thumbs):
+		"""
+		List the content which is stored on the device
+
+		:param count:		Desired number of entries
+		:param size:		maximum size of the returned thumbnail
+		:param thumbs:		If True, you will get thumbnails in return.
+		"""
 		url = "http://" + self.ip + ":" + self.port +"/osc/commands/execute"
 		data = json.dumps({"name":"camera.listImages", "parameters":{"entryCount":count, "maxSize":size, "includeThumb":bool(thumbs)}})
 		self.header["Content-Type"] = "application/json; charset=utf-8"
@@ -113,6 +138,11 @@ class OSCAPI:
 		return rep
 
 	def deleteImage(self, fileUri=None):
+		"""
+		Delete image on the device
+
+		:param fileUri:		URI of the image
+		"""
 		if fileUri == None:
 			return
 		url = "http://" + self.ip + ":" + self.port +"/osc/commands/execute"
@@ -123,6 +153,11 @@ class OSCAPI:
 		return rep
 
 	def getImage(self, fileUri=None):
+		"""
+		Get image from the device
+
+		:param fileUri:		URI of the image
+		"""
 		if fileUri == None:
 			return
 		url = "http://" + self.ip + ":" + self.port +"/osc/commands/execute"
@@ -132,6 +167,11 @@ class OSCAPI:
 		return req
 
 	def getImageMetadata(self, fileUri=None):
+		"""
+		Get the metadata to a image from the device
+
+		:param fileUri:		URI of the image
+		"""
 		if fileUri == None:
 			return
 		url = "http://" + self.ip + ":" + self.port +"/osc/commands/execute"
@@ -142,6 +182,11 @@ class OSCAPI:
 		return rep
 
 	def getOptions(self, optionlist=_options):
+		"""
+		Check which options the device supports
+
+		:param optionlist:		specified option you want to check
+		"""
 		url = "http://" + self.ip + ":" + self.port +"/osc/commands/execute"
 		data = json.dumps({"name":"camera.getOptions", "parameters":{"sessionId":self.sid, "optionNames":optionlist}})
 		self.header["Content-Type"] = "application/json; charset=utf-8"
@@ -155,6 +200,11 @@ class OSCAPI:
 		return rep
 
 	def setOption(self, settings=None):
+		"""
+		Change settings of the device
+
+		:param settings:		Option and Parameter you want to set
+		"""
 		if settings == None:
 			return
 		if not self.options:
@@ -170,6 +220,9 @@ class OSCAPI:
 		return rep
 
 	def info(self):
+		"""
+		Returns basic information about the device and functionality it supports
+		"""
 		url = "http://" + self.ip + ":" + self.port +"/osc/info"
 		req = requests.get(url, headers=self.header)
 		rep = req.json()
@@ -179,20 +232,36 @@ class OSCAPI:
 		return rep
 
 	def state(self):
+		"""
+		Returns the state attribute of the device
+		"""
 		url = "http://" + self.ip + ":" + self.port +"/osc/state"
 		req = requests.post(url, headers=self.header)
 		rep = req.json()
 		return rep
 
 	def getCmds(self):
+		"""
+		Returns the list of commands the device supports
+		"""
 		if not self.cmds:
 			self.info()
 		return self.cmds
 
 	def getSid(self):
+		"""
+		Returns the current session id
+		"""
 		return self.sid
 
 	def execCustomCmd(self, cmd=None, payload=None, contentType=None):
+		"""
+		Execute your own command
+
+		:param cmd:				Command for the request
+		:param payload:			Additional data for the command
+		:param contentType:		Additional headeri information
+		"""
 		if cmd == None:
 			return
 		url = "http://" + self.ip + ":" + self.port + cmd
