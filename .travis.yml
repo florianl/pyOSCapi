@@ -15,4 +15,5 @@ python:
 install:
   - pip install requests
   - pip install simplejson
+  - pip install time
   - python setup.py install
