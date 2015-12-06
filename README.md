@@ -1,4 +1,4 @@
-pyOSCapi
+pyOSCapi [![Build Status](https://api.travis-ci.org/florianl/pyOSCapi.svg?branch=master)](https://travis-ci.org/florianl/pyOSCapi)
 ========
 
 Python API to interact with network devices using the [Open Spherical Camera API](https://developers.google.com/streetview/open-spherical-camera/).
