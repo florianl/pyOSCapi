@@ -16,6 +16,54 @@ import requests
 import simplejson as json
 import time
 
+def __execute_request__(kind=None, url=None, headers=None, payload=None):
+	if kind == "post":
+		try:
+			response = requests.post(url, data=payload, headers=headers)
+		except requests.exceptions.RequestException as e:
+			print "RequestException"
+			return None
+		except requests.exceptions.ConnectionError as e:
+			print "ConnectionError"
+			return None
+		except requests.exceptions.TooManyRedirects as e:
+			print "TooManyRedirects"
+			return None
+		except requests.exceptions.ConnectTimeout as e:
+			print "ConnectTimeout"
+			return None
+		except requests.exceptions.ReadTimeout as e:
+			print "ReadTimeout"
+			return None
+		except requests.exceptions.Timeout as e:
+			print "Timeout"
+			return None
+	elif kind == "get":
+		try:
+			response = requests.get(url, data=payload, headers=headers)
+		except requests.exceptions.RequestException as e:
+			print "RequestException"
+			return None
+		except requests.exceptions.ConnectionError as e:
+			print "ConnectionError"
+			return None
+		except requests.exceptions.TooManyRedirects as e:
+			print "TooManyRedirects"
+			return None
+		except requests.exceptions.ConnectTimeout as e:
+			print "ConnectTimeout"
+			return None
+		except requests.exceptions.ReadTimeout as e:
+			print "ReadTimeout"
+			return None
+		except requests.exceptions.Timeout as e:
+			print "Timeout"
+			return None
+	else:
+		print "Unknown type of http-request"
+		return None
+	return response
+
 # currently supported options from the OSC API
 _options=(	"captureMode", "captureModeSupport",
 			"exposureProgram", "exposureProgramSupport",
@@ -51,7 +99,6 @@ class OSCAPI:
 		self.sid	= None
 		self.header	= {	"User-Agent":"pyOSCapi",
 						"X-XSRF-Protected":"1"}
-		self.__sess	= requests.session()
 		self.options 	= {}
 		self.cmds		= []
 
@@ -62,7 +109,9 @@ class OSCAPI:
 		url = "http://" + self.ip + ":" + self.port +"/osc/commands/execute"
 		data = json.dumps({"name":"camera.startSession"})
 		self.header["Content-Type"] = "application/json; charset=utf-8"
-		req = requests.post(url, data=data, headers=self.header)
+		req = __execute_request__("post", url, self.header, data)
+		if req == None:
+			return None
 		rep = req.json()
 		if rep["state"] == "done":
 			self.sid = (rep["results"]["sessionId"])
@@ -75,7 +124,9 @@ class OSCAPI:
 		url = "http://" + self.ip + ":" + self.port +"/osc/commands/execute"
 		data = json.dumps({"name":"camera.updateSession", "parameters":{"sessionId":self.sid}})
 		self.header["Content-Type"] = "application/json; charset=utf-8"
-		req = requests.post(url, data=data, headers=self.header)
+		req = __execute_request__("post", url, self.header, data)
+		if req == None:
+			return None
 		rep = req.json()
 		return rep
 
@@ -87,7 +138,9 @@ class OSCAPI:
 		data = json.dumps({"name":"camera.closeSession", "parameters":{"sessionId":self.sid}})
 		self.header["Content-Type"] = "application/json; charset=utf-8"
 		self.header["Connection"] = "close"
-		req = requests.post(url, data=data, headers=self.header)
+		req = __execute_request__("post", url, self.header, data)
+		if req == None:
+			return None
 		rep = req.json()
 		return rep
 
@@ -115,7 +168,9 @@ class OSCAPI:
 		url = "http://" + self.ip + ":" + self.port +"/osc/commands/execute"
 		data = json.dumps({"name":"camera.takePicture", "parameters":{"sessionId":self.sid}})
 		self.header["Content-Type"] = "application/json; charset=utf-8"
-		req = requests.post(url, data=data, headers=self.header)
+		req = __execute_request__("post", url, self.header, data)
+		if req == None:
+			return None
 		rep = req.json()
 		if wait == True:
 			if rep["state"] == "inProgress":
@@ -133,7 +188,9 @@ class OSCAPI:
 		url = "http://" + self.ip + ":" + self.port +"/osc/commands/execute"
 		data = json.dumps({"name":"camera.listImages", "parameters":{"entryCount":count, "maxSize":size, "includeThumb":bool(thumbs)}})
 		self.header["Content-Type"] = "application/json; charset=utf-8"
-		req = requests.post(url, data=data, headers=self.header)
+		req = __execute_request__("post", url, self.header, data)
+		if req == None:
+			return None
 		rep = req.json()
 		return rep
 
@@ -148,7 +205,9 @@ class OSCAPI:
 		url = "http://" + self.ip + ":" + self.port +"/osc/commands/execute"
 		data = json.dumps({"name":"camera.delete", "parameters":{"fileUri":fileUri}})
 		self.header["Content-Type"] = "application/json; charset=utf-8"
-		req = requests.post(url, data=data, headers=self.header)
+		req = __execute_request__("post", url, self.header, data)
+		if req == None:
+			return None
 		rep = req.json()
 		return rep
 
@@ -163,7 +222,9 @@ class OSCAPI:
 		url = "http://" + self.ip + ":" + self.port +"/osc/commands/execute"
 		data = json.dumps({"name":"camera.getImage", "parameters":{"fileUri":fileUri}})
 		self.header["Content-Type"] = "application/json; charset=utf-8"
-		req = requests.post(url, data=data, headers=self.header)
+		req = __execute_request__("post", url, self.header, data)
+		if req == None:
+			return None
 		return req
 
 	def getImageMetadata(self, fileUri=None):
@@ -177,7 +238,9 @@ class OSCAPI:
 		url = "http://" + self.ip + ":" + self.port +"/osc/commands/execute"
 		data = json.dumps({"name":"camera.getMetadata", "parameters":{"fileUri":fileUri}})
 		self.header["Content-Type"] = "application/json; charset=utf-8"
-		req = requests.post(url, data=data, headers=self.header)
+		req = __execute_request__("post", url, self.header, data)
+		if req == None:
+			return None
 		rep = req.json()
 		return rep
 
@@ -190,7 +253,9 @@ class OSCAPI:
 		url = "http://" + self.ip + ":" + self.port +"/osc/commands/execute"
 		data = json.dumps({"name":"camera.getOptions", "parameters":{"sessionId":self.sid, "optionNames":optionlist}})
 		self.header["Content-Type"] = "application/json; charset=utf-8"
-		req = requests.post(url, data=data, headers=self.header)
+		req = __execute_request__("post", url, self.header, data)
+		if req == None:
+			return None
 		rep = req.json()
 		for key in rep:
 			if key == "results":
@@ -215,7 +280,9 @@ class OSCAPI:
 		url = "http://" + self.ip + ":" + self.port +"/osc/commands/execute"
 		data = json.dumps({"name":"camera.setOptions", "parameters":{"sessionId":self.sid, "options":settings}})
 		self.header["Content-Type"] = "application/json; charset=utf-8"
-		req = requests.post(url, data=data, headers=self.header)
+		req = __execute_request__("post", url, self.header, data)
+		if req == None:
+			return None
 		rep = req.json()
 		return rep
 
@@ -224,7 +291,9 @@ class OSCAPI:
 		Returns basic information about the device and functionality it supports
 		"""
 		url = "http://" + self.ip + ":" + self.port +"/osc/info"
-		req = requests.get(url, headers=self.header)
+		req = __execute_request__("get", url, self.header)
+		if req == None:
+			return None
 		rep = req.json()
 		for key in rep:
 			if key == "api":
@@ -236,7 +305,9 @@ class OSCAPI:
 		Returns the state attribute of the device
 		"""
 		url = "http://" + self.ip + ":" + self.port +"/osc/state"
-		req = requests.post(url, headers=self.header)
+		req = __execute_request__("post", url, self.header)
+		if req == None:
+			return None
 		rep = req.json()
 		return rep
 
@@ -265,6 +336,8 @@ class OSCAPI:
 		if cmd == None:
 			return
 		url = "http://" + self.ip + ":" + self.port + cmd
-		req = requests.post(url, data=payload, headers=contentType)
+		req = __execute_request__("post", url, contentType, payload)
+		if req == None:
+			return None
 		rep = req.json()
 		return rep
