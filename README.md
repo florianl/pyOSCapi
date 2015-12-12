@@ -1,6 +1,6 @@
-pyOSCapi [![Build Status](https://api.travis-ci.org/florianl/pyOSCapi.svg?branch=master)](https://travis-ci.org/florianl/pyOSCapi) [![Coverage Status](https://coveralls.io/repos/florianl/pyOSCapi/badge.svg?branch=master&service=github)](https://coveralls.io/github/florianl/pyOSCapi?branch=master)
-
+pyOSCapi
 ========
+[![Build Status](https://api.travis-ci.org/florianl/pyOSCapi.svg?branch=master)](https://travis-ci.org/florianl/pyOSCapi) [![Coverage Status](https://coveralls.io/repos/florianl/pyOSCapi/badge.svg?branch=master&service=github)](https://coveralls.io/github/florianl/pyOSCapi?branch=master)
 
 Python API to interact with network devices using the [Open Spherical Camera API](https://developers.google.com/streetview/open-spherical-camera/).
 
