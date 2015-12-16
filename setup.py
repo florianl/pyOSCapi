@@ -16,7 +16,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='pyOSCapi',
-    version='0.2',
+    version='0.3',
     py_modules=['pyOSCapi'],
     packages=find_packages(),
     include_package_data=True,
