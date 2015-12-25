@@ -1,0 +1,7 @@
+[run]
+branch = true
+source = pyOSCapi
+
+[report]
+# Ignore missing source files, i.e. fake template-generated "files"
+ignore_errors = true
