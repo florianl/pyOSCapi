@@ -31,4 +31,6 @@ setup(
                     'Intended Audience :: Developers'
                 ],
     license = 'Apache License 2.0',
+    setup_requires= 'nose',
+    test_suite = 'nose.collector'
 )

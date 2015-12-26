@@ -19,7 +19,7 @@ install:
 
 script:
   - python setup.py install
-  - nosetests --with-coverage --cover-package=pyOSCapi
+  - python setup.py nosetests --with-coverage --cover-package=pyOSCapi
 
 after_success:
   - coveralls
