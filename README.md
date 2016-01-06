@@ -39,6 +39,6 @@ The settings to connect differ from manufacturer to manufacturer:
 License
 =======
 
-Copyright 2015 Florian Lehner
+Copyright 2015 - 2016 Florian Lehner
 
 Licensed under the Apache License, Version 2.0: [http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0)

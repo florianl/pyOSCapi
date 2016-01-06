@@ -1,4 +1,4 @@
-# Copyright 2015 Florian Lehner. All rights reserved.
+# Copyright 2015-2016 Florian Lehner. All rights reserved.
 #
 # The contents of this file are licensed under the Apache License, Version 2.0
 # (the "License"); you may not use this file except in compliance with the
