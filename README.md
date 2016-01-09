@@ -34,6 +34,9 @@ The settings to connect differ from manufacturer to manufacturer:
 ```python
 >>> cam.disconnect()
 ```
+### Run tests
+
+    $ python setup.py nosetests
 
 License
 =======
