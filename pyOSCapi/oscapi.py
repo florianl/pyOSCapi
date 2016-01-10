@@ -113,8 +113,9 @@ class OSCAPI:
 		if req == None:
 			return None
 		rep = req.json()
-		if rep["state"] == "done":
-			self.sid = (rep["results"]["sessionId"])
+        if rep["state"]:
+            if rep["state"] == "done":
+                self.sid = (rep["results"]["sessionId"])
 		return rep
 
 	def update(self):
@@ -154,8 +155,9 @@ class OSCAPI:
 		if "_bublCommands" in rep["state"]:
 			cmdStatus = rep["state"]["_bublCommands"]
 			for tmp in cmdStatus:
-				if tmp["state"] == "inProgress":
-					rep = self._checkProgress()
+                if tmp["state"]:
+                    if tmp["state"] == "inProgress":
+                        rep = self._checkProgress()
 		return rep
 
 	def takePicture(self, wait=True):
@@ -173,8 +175,9 @@ class OSCAPI:
 			return None
 		rep = req.json()
 		if wait == True:
-			if rep["state"] == "inProgress":
-				rep = self._checkProgress()
+            if rep["state"]:
+                if rep["state"] == "inProgress":
+                    rep = self._checkProgress()
 		return rep
 
 	def listImages(self, count, size, thumbs):
